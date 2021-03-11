@@ -24,6 +24,7 @@ function showData() {
             x: ['OTU 1167', 'OTU 2859', 'OTU 482', 'OTU 2264', 'OTU 41', 'OTU 1189', 'OTU 352', 'OTU 2318', 'OTU 1977'],
             y: [0, 100, 150],
               type: 'bar'
+              
             }
           ];
           
@@ -54,7 +55,7 @@ function showData() {
             {
               domain: { x: [0, 1], y: [0, 1] },
               value: 450,
-              title: { text: "Speed" },
+              title: { text: "Belly Button Washing Frequency" },
               type: "indicator",
               mode: "gauge+number",
               delta: { reference: 400 },
