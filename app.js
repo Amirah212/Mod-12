@@ -12,54 +12,62 @@ function showData() {
     d3.json('samples.json').then(({ metadata, samples }) => {
         var metadata = metadata.filter(obj => obj.id == name)[0];
         var sample = samples.filter(obj => obj.id == name)[0];
-
+        var { otu_ids, sample_values, otu_labels } = sample;
+        
+        d3.select('.panel-body').html('');
         Object.entries(metadata).forEach(([key,val])=>{
             d3.select('.panel-body').append('h5').text(key.toUpperCase()+': '+val);
         });
 
 
-        var data = [
+        var barData = [
             {
                 //y: [0, 100, 150],
-            x: ['OTU 1167', 'OTU 2859', 'OTU 482', 'OTU 2264', 'OTU 41', 'OTU 1189', 'OTU 352', 'OTU 2318', 'OTU 1977'],
-            y: [0, 100, 150],
+                x : sample_values.slice(0,10).reverse(),
+                y: otu_ids.slice(0,10).reverse().map(x=>'OTU '+ x),
+            orientation: 'h',
               type: 'bar'
               
             }
           ];
+
+          var barLayout = {
+            title: 'Top 10 Bacteria Cultures'
+          };          
           
-          Plotly.newPlot('bar', data);
+          Plotly.newPlot('bar', barData, barLayout);
 
           var trace1 = {
-            x: [500, 1000, 2000, 2500, 3000, 3500],
-            y: [0, 100, 150, 200],
+            x: sample_values,
+            y: otu_ids,
+            text: otu_labels,
             mode: 'markers',
             marker: {
-              size: [40, 60, 80, 100]
+              size: sample_values,
+              color: otu_ids,
+              colorscale: 'Earth'
             }
           };
           
-          var data = [trace1];
+          var bubbleData = [trace1];
           
-          var layout = {
+          var bubbleLayout = {
             title: 'Bacteria Cultures Per Sample',
-            showlegend: false,
-            height: 600,
-            width: 600
           };
+
           
-          Plotly.newPlot('bubble', data, layout);
+          Plotly.newPlot('bubble', bubbleData, bubbleLayout);
 
-
+console.log(metadata);
           var data = [
             {
               domain: { x: [0, 1], y: [0, 1] },
-              value: 450,
-              title: { text: "Belly Button Washing Frequency" },
+              value: metadata.wfreq,
+              title: { text: "Belly Button Washing Frequency<br>Scrbs per Week" },
               type: "indicator",
               mode: "gauge+number",
               delta: { reference: 400 },
-              gauge: { axis: { range: [null, 500] } }
+              gauge: { axis: { range: [0, 9] } }
             }
           ];
           
